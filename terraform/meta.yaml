@@ -1,0 +1,15 @@
+#cloud-config
+
+users:
+ - name: morzin
+   groups: sudo
+   shell: /bin/bash
+   sudo: ['ALL=(ALL) NOPASSWD:ALL']
+   ssh-authorized-keys:
+     - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKroBnA8kQKHkZFaQ3P/0mXsCasHVxLRo2fpwhh+4sZZ morzin@morzin
+
+
+
+
+
+
