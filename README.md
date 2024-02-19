@@ -1,6 +1,8 @@
 
 #  Дипломная работа по профессии «Системный администратор»
 
+<details> 
+
 Содержание
 ==========
 * [Задача](#Задача)
@@ -103,3 +105,84 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 1. Вопросы вида «Ничего не работает. Не запускается. Всё сломалось». Дипломный руководитель не сможет ответить на такой вопрос без дополнительных уточнений. Цените своё время и время других.
 2. Откладывание выполнения дипломной работы на последний момент.
 3. Ожидание моментального ответа на свой вопрос. Дипломные руководители — работающие инженеры, которые занимаются, кроме преподавания, своими проектами. Их время ограничено, поэтому постарайтесь задавать правильные вопросы, чтобы получать быстрые ответы :)
+
+</details>
+
+# Решение
+
+<details>
+
+### Подготовка локальной VM для работы с Yandex Cloud
+
+В первую очередь, нам необходимо установить YC Cli, ориентируясь на документацию на сайте.
+
+Следующим шагом мы устанавливаем и инициализируем terraform
+![image](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/images/img1.png)
+
+### Настройка Terraform и поднятие инфраструктуры
+
+Далее мы конфигурируем нашу будущую облачную инфраструктуру для поднятия её через terraform в файле [main.tf](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/terraform/main.tf) и проверяем командой 'terraform plan'
+![image](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/images/img2.png)
+
+Далее мы проверяем результат вывода команды 'terraform apply' уже в самой консоли YC
+Как мы видим, все необходимые ВМ для выполнения задачи поднялись и работают
+![image](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/images/img3.png)
+
+### Сайт
+
+#### Создание 2 VM для веб серверов
+
+Первым шагом нам необходимо установить и настроить ansible для работы с облачной инфраструктурой. Настраиваем список ВМ в файле [hosts.yml](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/ansible/hosts.yml)
+и проверяем доступность наших web серверов
+![image](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/images/img8.png)
+
+следующим шагом мы запускаем наш ansible-playbook [nginx.yml](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/ansible/nginx.yml) для установки nginx на подготовленные облачные ВМ для web серверов c с копированием фала 'index.html'
+![image](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/images/img9.png)
+
+#### Создание target group
+На этом шаге мы создаем target group и вносим в неё наши web серверы. 
+![image](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/images/img4.png)
+
+#### Создание backend group
+![image](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/images/img5.png)
+
+#### HTTTP-router
+![image](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/images/img6.png)
+
+#### Application load-balancer
+![image](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/images/img7.png)
+
+#### Протестируем сайт
+`curl -v 158.160.130.127:80` 
+
+![image](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/images/img10.png)
+
+Так же проверим сайт через web
+
+![image](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/images/img11.png)
+
+
+
+### Мониторинг
+Создайте ВМ, разверните на ней Zabbix. На каждую ВМ установите Zabbix Agent, настройте агенты на отправление метрик в Zabbix. 
+
+Настройте дешборды с отображением метрик, минимальный набор — по принципу USE (Utilization, Saturation, Errors) для CPU, RAM, диски, сеть, http запросов к веб-серверам. Добавьте необходимые tresholds на соответствующие графики.
+
+### Логи
+Cоздайте ВМ, разверните на ней Elasticsearch. Установите filebeat в ВМ к веб-серверам, настройте на отправку access.log, error.log nginx в Elasticsearch.
+
+Создайте ВМ, разверните на ней Kibana, сконфигурируйте соединение с Elasticsearch.
+
+### Сеть
+Разверните один VPC. Сервера web, Elasticsearch поместите в приватные подсети. Сервера Zabbix, Kibana, application load balancer определите в публичную подсеть.
+
+Настройте [Security Groups](https://cloud.yandex.com/docs/vpc/concepts/security-groups) соответствующих сервисов на входящий трафик только к нужным портам.
+
+Настройте ВМ с публичным адресом, в которой будет открыт только один порт — ssh.  Эта вм будет реализовывать концепцию  [bastion host]( https://cloud.yandex.ru/docs/tutorials/routing/bastion) . Синоним "bastion host" - "Jump host". Подключение  ansible к серверам web и Elasticsearch через данный bastion host можно сделать с помощью  [ProxyCommand](https://docs.ansible.com/ansible/latest/network/user_guide/network_debug_troubleshooting.html#network-delegate-to-vs-proxycommand) . Допускается установка и запуск ansible непосредственно на bastion host.(Этот вариант легче в настройке)
+
+### Резервное копирование
+Создайте snapshot дисков всех ВМ. Ограничьте время жизни snaphot в неделю. Сами snaphot настройте на ежедневное копирование.
+
+
+</details>
+
