@@ -171,7 +171,7 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 
 ![image](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/images/img13.png)
 
-Далее нам необходимо организовать сбор метрик со всех серверов. Реализуем эту задачу через запуск ansible-playbook [zabbix-agent.yml](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/ansible/zabbix-agent.yml) для установки zabbix-agent на все сервера с копированием [настроек]https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/ansible/config/zabbix_agent.conf
+Далее нам необходимо организовать сбор метрик со всех серверов. Реализуем эту задачу через запуск ansible-playbook [zabbix-agent.yml](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/ansible/zabbix-agent.yml) для установки zabbix-agent на все сервера с копированием [настроек](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/ansible/config/zabbix_agent.conf)
 
 ![image](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/images/img14.png)
 
@@ -180,8 +180,9 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 
 #### Дашборд доступен на сервере Zabbix адресу:
 http://158.160.142.149:8080/zabbix.php?action=dashboard.view&dashboardid=314
-Логин Admin
-Пароль zabbix
+
+- Логин Admin
+- Пароль zabbix
 
 ### Логи
 Cоздайте ВМ, разверните на ней Elasticsearch. Установите filebeat в ВМ к веб-серверам, настройте на отправку access.log, error.log nginx в Elasticsearch.
