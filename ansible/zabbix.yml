@@ -99,7 +99,7 @@
       ansible.builtin.lineinfile:
         path: /etc/zabbix/zabbix_server.conf
         insertafter: "DBPassword="
-        line: DBPassword={{sys-23}}
+        line: DBPassword={{password_db}}
 
     - name: set php port
       shell: sed -i 's/#        listen          8080;/        listen          8080;/g' /etc/zabbix/nginx.conf

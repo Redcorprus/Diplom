@@ -16,7 +16,7 @@ filebeat.inputs:
 
 - type: filestream
 
-  id: ans-filebeat
+  id: morzin-filebeat
 
   enabled: true
 

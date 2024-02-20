@@ -21,7 +21,7 @@ cluster.name: morzin-diplom
 # Use a descriptive name for the node:
 #
 node.name:
-  morzinanton
+  elstic
   #node.roles: [master]
   #cluster.initial_master_nodes: ["morzin"]
 #
