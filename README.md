@@ -176,6 +176,7 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 ![image](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/images/img14.png)
 
 Настроим дашборд согласно поставленной задачи:
+
 ![image](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/images/img15.png)
 
 #### Дашборд доступен на сервере Zabbix адресу:
@@ -190,15 +191,20 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 Создайте ВМ, разверните на ней Kibana, сконфигурируйте соединение с Elasticsearch.
 
 ### Сеть
-Разверните один VPC. Сервера web, Elasticsearch поместите в приватные подсети. Сервера Zabbix, Kibana, application load balancer определите в публичную подсеть.
+Создадим VPC и поместим ВМ в подсети, согласно задаче:
+Карта сети
 
-Настройте [Security Groups](https://cloud.yandex.com/docs/vpc/concepts/security-groups) соответствующих сервисов на входящий трафик только к нужным портам.
+![image](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/images/img30.png)
+
+Настроим Security Groups
+
+![image](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/images/img31.png)
 
 Доступ к хостам осуществляется по ssh через bastion.
 Например, для подключение к серверу Elasticsearch нам необходимо выполнить команду:
 `ssh -i ~/.ssh/id_ed25519 -J morzin@158.160.146.42 morzin@192.168.3.10`
 
-
+![image](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/images/img32.png)
 
 
 ### Резервное копирование
