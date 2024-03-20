@@ -180,15 +180,31 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 ![image](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/images/img15.png)
 
 #### Дашборд доступен на сервере Zabbix адресу:
-http://158.160.142.149:8080/zabbix.php?action=dashboard.view&dashboardid=314
+http://158.160.139.152:8080/zabbix.php?action=dashboard.view
 
 - Логин Admin
 - Пароль zabbix
 
 ### Логи
-Cоздайте ВМ, разверните на ней Elasticsearch. Установите filebeat в ВМ к веб-серверам, настройте на отправку access.log, error.log nginx в Elasticsearch.
 
-Создайте ВМ, разверните на ней Kibana, сконфигурируйте соединение с Elasticsearch.
+#### Разворачиваем Elasticsearch 
+Запускаем установику через наш ansible-playbook [elasticsearch.yml](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/ansible/elasticsearch.yml) и проверяем работоспособность сервиса командой `CURL --user morzin:123456 -X GET http"//192.168.3.10:9200?pretty"`
+![image](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/images/img16.png)
+
+#### Разворачиваем Kibana
+Запускаем установику через наш ansible-playbook [kibana.yml](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/ansible/kibana.yml)
+![image](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/images/img17.png)
+
+#### Устанавливаем Filebeat
+Запускаем установику через наш ansible-playbook [filebeat.yml](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/ansible/filebeat.yml)
+![image](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/images/img18.png)
+
+#### Проверяем работу стека для сбора логов
+
+![image](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/images/img19.png)
+
+Стек доступен по ссылке http://158.160.147.28:5601/app/discover#/?_g=(filters:!(),query:(language:kuery,query:''),refreshInterval:(pause:!t,value:0),time:(from:now%2Fd,to:now%2Fd))&_a=(columns:!(),filters:!(),index:'filebeat-*',interval:auto,query:(language:kuery,query:''),sort:!(!('@timestamp',desc)))
+
 
 ### Сеть
 Создадим VPC и поместим ВМ в подсети, согласно задаче:
@@ -208,8 +224,12 @@ Cоздайте ВМ, разверните на ней Elasticsearch. Устан
 
 
 ### Резервное копирование
-Создайте snapshot дисков всех ВМ. Ограничьте время жизни snaphot в неделю. Сами snaphot настройте на ежедневное копирование.
 
+Для настройки резервного копирования запускаем [snapshots.tf](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/terraform/snapshots.tf)
+
+Проверяем работу
+
+![image](https://github.com/Redcorprus/Diplom/blob/diplom-zabbix/images/img20.png)
 
 </details>
 
