@@ -5,3 +5,8 @@ terraform/terraform.tfstate.backup
 terraform/terraform.tfstate
 ansible/config/GPG-KEY-elasticsearch
 GPG-KEY-elasticsearch
+.terraform.lock.hcl
+.terraform
+terraform/.terraform
+terraform/.terraform.lock.hcl
+.terraform/providers/registry.terraform.io/yandex-cloud/yandex/0.107.0/linux_amd64
